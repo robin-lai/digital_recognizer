@@ -66,6 +66,32 @@ def loadTestResult():
     return toInt(label[:,1])  #  label 28000*1
 
 #dataSet:m*n   labels:m*1  X:1*n
+"""
+implement KNN use nest list
+"""
+def KNN1(data_a,data_b,labels,k):
+    dists = []*len(data_b)
+    predict = []*len(data_a)
+    for data_a_index in data_a:
+        for data_b_index in data_b:
+            dist = euclidean(data_a[data_a_index], data_b[data_b_index])
+            dists.append(dist)
+        sort(dists)
+        k_neighs_index = dists[:k]
+        k_neighs = [0]*k
+        for val in k_neighs_index:
+            k_neighs.append([labels[k_neighs_index]])
+        #dict_neighs = dict(((i,k_neighs.count(i) for i in k_neighs)))
+        from collections import Counter
+        dict_neighs = Counter(k_neighs)
+        predict_label = dict_neighs.most_common(1)
+        predict.append(predict_label)
+    return predict
+
+
+'''
+implement use numpy.array
+'''
 def KNN_Classify(X, dataSet, labels, k):
     X=mat(X)
     dataSet=mat(dataSet)
