@@ -65,18 +65,19 @@ def loadTestResult():
     label=array(l)
     return toInt(label[:,1])  #  label 28000*1
 
-#dataSet:m*n   labels:m*1  inX:1*n
-def classify(inX, dataSet, labels, k):
-    inX=mat(inX)
+#dataSet:m*n   labels:m*1  X:1*n
+def KNN_Classify(X, dataSet, labels, k):
+    X=mat(X)
     dataSet=mat(dataSet)
     labels=mat(labels)
     dataSetSize = dataSet.shape[0]                  
-    diffMat = tile(inX, (dataSetSize,1)) - dataSet   
+    diffMat = tile(X, (dataSetSize,1)) - dataSet
     sqDiffMat = array(diffMat)**2
     sqDistances = sqDiffMat.sum(axis=1)                  
     distances = sqDistances**0.5
     sortedDistIndicies = distances.argsort()            
-    classCount={}                                      
+    classCount={}
+
     for i in range(k):
         voteIlabel = labels[sortedDistIndicies[i],0]
         classCount[voteIlabel] = classCount.get(voteIlabel,0) + 1
@@ -100,7 +101,7 @@ def handwritingClassTest():
     errorCount=0
     resultList=[]
     for i in range(m):
-         classifierResult = classify(testData[i], trainData, trainLabel.transpose(), 5)
+         classifierResult = KNN_Classify(testData[i], trainData, trainLabel.transpose(), 5)
          resultList.append(classifierResult)
          print "the classifier came back with: %d, the real answer is: %d" % (classifierResult, testLabel[0,i])
          if (classifierResult != testLabel[0,i]): errorCount += 1.0
